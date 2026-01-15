@@ -1,0 +1,106 @@
+# Monitoramento de Cercas Virtuais
+
+Sistema de monitoramento em tempo real de dispositivos GPS que detecta quando veículos entram ou saem de áreas geográficas definidas (cercas virtuais).
+
+## Sobre o Projeto
+
+Este sistema consome mensagens de localização de dispositivos através do Apache Kafka, verifica se os dispositivos estão dentro ou fora de áreas pré-definidas e registra todas as transições (entradas e saídas) em um arquivo CSV.
+
+## Funcionalidades
+
+- **Monitoramento em tempo real** de dispositivos via Kafka
+- **Detecção de cercas virtuais** baseada em coordenadas GPS
+- **Registro de transições** (entrada/saída de áreas) em CSV
+- **Cálculo de permanência** em cada área
+- **Suporte a múltiplas áreas** configuradas via GeoJSON
+
+## Tecnologias
+
+- **Node.js** - Runtime JavaScript
+- **KafkaJS** - Cliente Apache Kafka
+- **GeoJSON** - Formato de áreas geográficas
+
+## Instalação
+```bash
+npm install
+```
+
+## Configuração
+
+1. Copie o arquivo `.env.example` para `.env`
+2. Configure as variáveis de ambiente do Kafka
+3. Configure as áreas no arquivo `config/config_areas.geojson`
+
+## Uso
+
+```bash
+# Executar em modo produção
+npm start
+
+# Executar em modo desenvolvimento (com watch)
+npm run dev
+```
+
+## Demonstração
+
+### Inicialização do Sistema
+
+Ao iniciar, o sistema realiza verificações de configuração e conecta ao Kafka:
+
+![Inicialização do Sistema](docs/inicializacao.png)
+
+O sistema verifica:
+- ✅ Carregamento das áreas geográficas do arquivo GeoJSON
+- ✅ Inicialização do arquivo CSV de movimentações
+- ✅ Conexão com o Apache Kafka
+- ✅ Subscrição ao tópico configurado
+
+### Logs em Tempo Real
+
+Durante a execução, o sistema exibe logs detalhados de cada dispositivo:
+
+![Logs em Tempo Real](docs/logs-tempo-real.png)
+
+Os logs mostram:
+- 🟢 **DENTRO** - Dispositivo está dentro da área
+- 🔴 **FORA** - Dispositivo está fora da área
+- 📍 Coordenadas GPS (latitude, longitude)
+- 🚗 Identificação do dispositivo e placa
+- 🏢 Nome da área monitorada
+
+### Detecção de Transições
+
+Quando um dispositivo entra ou sai de uma área, o sistema detecta e registra a transição:
+
+![Transições Detectadas](docs/transicoes.png)
+
+Cada transição inclui:
+- Tipo de transição (ENTRADA ou SAÍDA)
+- Tempo de permanência na área anterior
+- Coordenadas exatas da transição
+- Informações completas do dispositivo
+
+### Salvamento no CSV
+
+Todas as transições são automaticamente salvas no arquivo `movimentacoes.csv`:
+
+![Arquivo CSV](docs/movimentacoes-csv.png)
+
+O arquivo contém:
+- Timestamp da transição
+- ID do dispositivo e placa
+- Nome e identificador da área
+- Tipo de transição (ENTRADA/SAÍDA)
+- Duração formatada
+- Coordenadas GPS
+
+### Encerramento do Sistema
+
+Ao desativar o sistema (Ctrl+C), ele desconecta do Kafka de forma segura:
+
+![Encerramento](docs/encerramento.png)
+
+O sistema:
+- Recebe o sinal de interrupção (SIGINT)
+- Desconecta o consumidor Kafka
+- Finaliza todas as operações de forma limpa

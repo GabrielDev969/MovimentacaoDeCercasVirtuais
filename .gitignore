@@ -1,0 +1,9 @@
+.env
+certificados/ca.crt
+certificados/user.crt
+certificados/user.key
+certificados/grupo-kafka.txt
+certificados/user.password
+certificados/user.p12
+movimentacoes.csv
+node_modules/
