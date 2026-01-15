@@ -98,7 +98,7 @@ class DeviceConsumer {
         transition.duration
       );
 
-      csvWriter.writeTransition({
+      await csvWriter.writeTransition({
         deviceId: device_id,
         plate: plate || code || 'N/A',
         identifier,

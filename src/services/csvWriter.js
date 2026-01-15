@@ -20,19 +20,29 @@ class CSVWriter {
       'longitude',
     ];
     this.initialized = false;
+    this.initPromise = null;
   }
 
-  initialize() {
+  async initialize() {
     if (this.initialized) return;
 
-    if (!fs.existsSync(this.filePath)) {
-      fs.writeFileSync(this.filePath, this.headers.join(';') + '\n', 'utf-8');
-      console.log(`Arquivo ${this.filePath} criado com sucesso`);
-    } else {
-      console.log(`Arquivo ${this.filePath} já existe`);
+    if(this.initPromise) {
+      await this.initPromise;
+      return;
     }
 
-    this.initialized = true;
+    this.initPromise = (async () => {
+      try {
+        await fs.access(this.filePath);
+        console.log(`Arquivo ${this.filePath} já existe`);
+      }catch{
+        await fs.writeFile(this.filePath, this.headers.join(';') + '\n', 'utf-8');
+        console.log(`Arquivo ${this.filePath} criado com sucesso`);
+      }
+      this.initialized = true;
+    })();
+
+    await this.initPromise;
   }
 
   escapeValue(value) {
