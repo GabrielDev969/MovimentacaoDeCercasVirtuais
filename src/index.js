@@ -35,7 +35,6 @@ async function main() {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
 
     await consumer.start();
-
   } catch (error) {
     console.error('❌ Erro fatal:', error.message);
     console.error(error.stack);
