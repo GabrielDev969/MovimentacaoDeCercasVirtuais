@@ -49,7 +49,7 @@ export interface Transition {
 export interface DeviceState {
   isInside: boolean;
   lastStateChange: Date;
-  indentifier: string;
+  identifier: string;
   plate: string;
 }
 
@@ -71,6 +71,6 @@ export interface KafkaConfig {
 }
 
 export interface DeviceInfo {
-  indentifier: string;
+  identifier: string;
   plate: string;
 }

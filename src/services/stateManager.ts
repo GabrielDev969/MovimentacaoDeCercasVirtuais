@@ -19,7 +19,7 @@ export class StateManager {
     });
   }
 
-  proccessTransition(
+  processTransition(
     deviceId: string,
     currentlyInside: boolean,
     deviceInfo: DeviceInfo
@@ -31,7 +31,7 @@ export class StateManager {
       this.setState(deviceId, {
         isInside: currentlyInside,
         lastStateChange: now,
-        indentifier: deviceInfo.indentifier,
+        identifier: deviceInfo.identifier,
         plate: deviceInfo.plate,
       });
 
@@ -60,7 +60,7 @@ export class StateManager {
     this.setState(deviceId, {
       isInside: currentlyInside,
       lastStateChange: now,
-      indentifier: deviceInfo.indentifier,
+      identifier: deviceInfo.identifier,
       plate: deviceInfo.plate,
     });
 

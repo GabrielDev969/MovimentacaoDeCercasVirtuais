@@ -81,10 +81,10 @@ export class DeviceConsumer {
             return;
         }
 
-        const transition = stateManager.proccessTransition(
+        const transition = stateManager.processTransition(
             device_id, 
             geoResult.isInside, 
-            { indentifier: 
+            { identifier: 
                 identifier, plate: plate || code || 'N/A' 
             }
         );
@@ -95,7 +95,16 @@ export class DeviceConsumer {
         console.log(`${statusIcon} [${new Date().toLocaleTimeString()}] Device ${device_id} | ${plate || 'N/A'} | ${geoResult.areaName} | ${statusText} | (${latitude}, ${longitude})`);
 
         if(transition.hasTransition) {
+            if(transition.duration === null) {
+                console.warn('Duração é null');
+                return;
+            }
             const durationFormatted = stateManager.formatDuration(transition.duration!);
+
+            if(!geoResult.areaName) {
+                console.warn('Área não encontrada');
+                return;
+            }
             
             await csvWriter.writeTransition({
                 deviceId: device_id,
