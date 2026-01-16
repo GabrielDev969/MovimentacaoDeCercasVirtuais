@@ -20,9 +20,13 @@ export class DeviceConsumer {
             await this.consumer.subscribe({ topic: this.topic, fromBeginning: false });
             console.log(`Consumidor conectado ao tópico ${this.topic}`);
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-            console.error(`Erro ao conectar ao consumidor: ${errorMessage}`);
-            throw error;
+            if(error instanceof Error) {
+                if(error.message.includes('ECONNREFUSED')) {
+                    throw new Error(`Não foi possível conectar ao Kafka: ${error.message}`);
+                }
+                throw error;
+            }
+            throw new Error('Erro desconhecido ao conectar ao Kafka');
         }
     }
 
