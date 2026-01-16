@@ -29,40 +29,52 @@ Este sistema consome mensagens de localização de dispositivos através do Apac
 ## Instalação
 
 1. Clone o repositório:
-```bash 
-git clone https://github.com/GabrielDev969/MovimentacaoDeCercasVirtuais.git
-cd MovimentacaoDeCercasVirtuais
-```
+    ```bash 
+    git clone https://github.com/GabrielDev969/MovimentacaoDeCercasVirtuais.git
+    cd MovimentacaoDeCercasVirtuais
+    ```
 
 2. Instale as dependências:
-```bash 
-npm install
-```
+    ```bash 
+    npm install
+    ```
 
 3. Compile o projeto TypeScript:
-```bash 
-npm run build
-```
+    ```bash 
+    npm run build
+    ```
 
 ## Configuração
 
-1. Copie o arquivo `.env.example` para `.env`
-```env
-# Configuração do Kafka
-KAFKA_BROKERS=broker1:9093,broker2:9093
-KAFKA_TOPIC=nome-do-topico
-KAFKA_GROUP_ID=grupo-consumidor
-KAFKA_CLIENT_ID=device-tracker
+1. Crie a pasta `certificados` na raiz do projeto e adicione os certificados SSL:
+    ```bash 
+    mkdir certificados
+    ```
 
-# Caminhos dos certificados SSL (obrigatórios)
-KAFKA_CA_CERTIFICATE_PATH=certificados/ca-cert.pem
-KAFKA_KEY_CERTIFICATE_PATH=certificados/client.key
-KAFKA_CERTIFICATE_PATH=certificados/client.crt
+2. Coloque os seguintes arquivos de certificado na pasta certificados/:
 
-# Senha da chave privada
-KAFKA_KEY_PASSWORD=sua-senha-aqui
-```
-2. Configure as variáveis de ambiente do Kafka
+    - `ca-cert.pem` - Certificado da autoridade certificadora (CA)
+    - `client.key` - Chave privada do cliente
+    - `client.crt` - Certificado do cliente
+
+    **Importante**: Certifique-se de que os nomes dos arquivos correspondem aos caminhos configurados no arquivo .env.
+
+3. Copie o arquivo `.env.example` para `.env`
+    ```env
+    # Configuração do Kafka
+    KAFKA_BROKERS=broker1:9093
+    KAFKA_TOPIC=new-location-received
+    KAFKA_GROUP_ID=grupo-consumidor
+    KAFKA_CLIENT_ID=monitoramento-cercas-virtuais
+
+    # Caminhos dos certificados SSL (obrigatórios)
+    KAFKA_CA_CERTIFICATE_PATH=certificados/ca-cert.pem
+    KAFKA_KEY_CERTIFICATE_PATH=certificados/user.key
+    KAFKA_CERTIFICATE_PATH=certificados/user.crt
+
+    # Senha da chave privada
+    KAFKA_KEY_PASSWORD=sua-senha-aqui
+    ```
 
 ## Uso
 
