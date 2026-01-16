@@ -99,24 +99,19 @@ export class DeviceConsumer {
         console.log(`${statusIcon} [${new Date().toLocaleTimeString()}] Device ${device_id} | ${plate || 'N/A'} | ${geoResult.areaName} | ${statusText} | (${latitude}, ${longitude})`);
 
         if(transition.hasTransition) {
-            if(transition.duration === null) {
-                console.warn('Duração é null');
+            if(transition.duration === null || !geoResult.areaName) {
+                console.warn('Dados incompletos para transição - duration ou areaName ausentes');
                 return;
             }
-            const durationFormatted = stateManager.formatDuration(transition.duration!);
-
-            if(!geoResult.areaName) {
-                console.warn('Área não encontrada');
-                return;
-            }
+            const durationFormatted = stateManager.formatDuration(transition.duration);
             
             await csvWriter.writeTransition({
                 deviceId: device_id,
                 plate: plate || code || 'N/A',
                 identifier,
-                areaName: geoResult.areaName!,
+                areaName: geoResult.areaName,
                 transitionType: transition.transitionType,
-                durationMs: transition.duration!,
+                durationMs: transition.duration,
                 durationFormatted,
                 latitude,
                 longitude,
