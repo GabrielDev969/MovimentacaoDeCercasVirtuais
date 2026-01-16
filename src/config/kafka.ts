@@ -17,7 +17,10 @@ function loadFile(relativePath: string): Buffer {
 }
 
 export function createKafkaClient(): Kafka {
-  const brokers = process.env.KAFKA_BROKERS?.split(',').map(b => b.trim()).filter(Boolean) || [];
+  const brokers =
+    process.env.KAFKA_BROKERS?.split(',')
+      .map((b) => b.trim())
+      .filter(Boolean) || [];
 
   if (brokers.length === 0) {
     throw new Error('KAFKA_BROKERS não configurado no .env');
@@ -26,7 +29,7 @@ export function createKafkaClient(): Kafka {
   const requiredEnvVars = [
     'KAFKA_CA_CERTIFICATE_PATH',
     'KAFKA_KEY_CERTIFICATE_PATH',
-    'KAFKA_CERTIFICATE_PATH'
+    'KAFKA_CERTIFICATE_PATH',
   ];
 
   for (const envVar of requiredEnvVars) {
