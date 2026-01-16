@@ -68,7 +68,7 @@ Este sistema consome mensagens de localização de dispositivos através do Apac
     KAFKA_CLIENT_ID=monitoramento-cercas-virtuais
 
     # Caminhos dos certificados SSL (obrigatórios)
-    KAFKA_CA_CERTIFICATE_PATH=certificados/ca-cert.pem
+    KAFKA_CA_CERTIFICATE_PATH=certificados/ca.crt
     KAFKA_KEY_CERTIFICATE_PATH=certificados/user.key
     KAFKA_CERTIFICATE_PATH=certificados/user.crt
 
