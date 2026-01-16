@@ -1,21 +1,35 @@
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
+
 export default [
-    {
-      languageOptions: {
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
-        globals: {
-          console: 'readonly',
-          process: 'readonly',
-          Buffer: 'readonly',
-          __dirname: 'readonly',
-          __filename: 'readonly',
-        },
+        project: './tsconfig.json',
       },
-      rules: {
-        'no-console': 'off',
-        'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-        'prefer-const': 'warn',
-        'no-undef': 'error',
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
       },
     },
-  ];
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      'no-console': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' },
+      ],
+      'prefer-const': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+];

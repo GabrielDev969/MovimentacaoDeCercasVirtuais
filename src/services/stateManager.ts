@@ -1,20 +1,29 @@
-class StateManager {
-  constructor() {
-    this.devicesStates = new Map();
-  }
+import type {
+  DeviceState,
+  Transition,
+  TransitionType,
+  DeviceInfo,
+} from '../types';
 
-  getState(deviceId) {
+export class StateManager {
+  private devicesStates: Map<string, DeviceState> = new Map();
+
+  getState(deviceId: string): DeviceState | null {
     return this.devicesStates.get(deviceId) || null;
   }
 
-  setState(deviceId, state) {
+  private setState(deviceId: string, state: DeviceState): void {
     this.devicesStates.set(deviceId, {
       ...state,
       lastStateChange: state.lastStateChange || new Date(),
     });
   }
 
-  processTransition(deviceId, currentlyInside, deviceInfo) {
+  proccessTransition(
+    deviceId: string,
+    currentlyInside: boolean,
+    deviceInfo: DeviceInfo
+  ): Transition {
     const previousState = this.getState(deviceId);
     const now = new Date();
 
@@ -44,7 +53,9 @@ class StateManager {
     }
 
     const duration = now.getTime() - previousState.lastStateChange.getTime();
-    const transitionType = previousState.isInside ? 'SAIDA' : 'ENTRADA';
+    const transitionType: TransitionType = previousState.isInside
+      ? 'SAIDA'
+      : 'ENTRADA';
 
     this.setState(deviceId, {
       isInside: currentlyInside,
@@ -61,7 +72,7 @@ class StateManager {
     };
   }
 
-  formatDuration(ms) {
+  formatDuration(ms: number): string {
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -79,7 +90,7 @@ class StateManager {
     return `${seconds}s`;
   }
 
-  getDeviceCount() {
+  getDeviceCount(): number {
     return this.devicesStates.size;
   }
 }

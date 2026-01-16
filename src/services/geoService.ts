@@ -1,22 +1,23 @@
-import fs from 'fs';
-import path from 'path';
 import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
+import type { GeoJSONFeatureCollection, GeoResult, Area } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-class GeoService {
-  constructor() {
-    this.areas = new Map();
-  }
+export class GeoService {
+  private areas: Map<string, Area> = new Map();
 
-  loadAreas(configpath) {
-    const fullPath = path.resolve(__dirname, '../..', configpath);
+  loadAreas(configPath: string): number {
+    const fullPath = path.resolve(__dirname, '../..', configPath);
 
     if (!fs.existsSync(fullPath)) {
-      throw new Error(`Arquivo de configuração ${configpath} não encontrado`);
+      throw new Error(`Arquivo de configuração ${configPath} não encontrado`);
     }
 
-    const data = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+    const data: GeoJSONFeatureCollection = JSON.parse(
+      fs.readFileSync(fullPath, 'utf8')
+    );
 
     if (data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
       throw new Error('Formato inválido do arquivo de áreas');
@@ -29,8 +30,15 @@ class GeoService {
         continue;
       }
 
+      if (feature.geometry.type !== 'Polygon') {
+        console.warn(
+          `Tipo de geometria não suportado: ${feature.geometry.type}`
+        );
+        continue;
+      }
+
       this.areas.set(identifier, {
-        name: feature.properties?.area_name,
+        name: feature.properties?.area_name || identifier,
         polygon: feature.geometry.coordinates[0],
       });
     }
@@ -39,13 +47,17 @@ class GeoService {
     return this.areas.size;
   }
 
-  isPointInPolygon(lat, long, polygon) {
+  private isPointInPolygon(
+    lat: number,
+    long: number,
+    polygon: number[][]
+  ): boolean {
     let inside = false;
     const n = polygon.length;
 
     for (let i = 0, j = n - 1; i < n; j = i++) {
-      const [xi, yi] = polygon[i];
-      const [xj, yj] = polygon[j];
+      const [xi, yi] = polygon[i]!;
+      const [xj, yj] = polygon[j]!;
 
       const intersect =
         yi > lat !== yj > lat &&
@@ -59,7 +71,11 @@ class GeoService {
     return inside;
   }
 
-  checkDeviceInArea(identifier, latitude, longitude) {
+  checkDeviceInArea(
+    identifier: string,
+    latitude: number,
+    longitude: number
+  ): GeoResult {
     const area = this.areas.get(identifier);
 
     if (!area) {
@@ -79,7 +95,7 @@ class GeoService {
     };
   }
 
-  getAreaName(identifier) {
+  getAreaName(identifier: string): string | null {
     return this.areas.get(identifier)?.name || null;
   }
 }

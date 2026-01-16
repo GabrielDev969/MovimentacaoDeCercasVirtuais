@@ -7,19 +7,26 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint src/**/*.js --fix",
-    "format": "prettier --write \"src/**/*.js\"",
-    "format:check": "prettier --check \"src/**/*.js\""
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "node --watch dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
     "kafkajs": "^2.2.4"
   },
   "devDependencies": {
+    "@types/node": "^25.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
     "eslint": "^9.39.2",
-    "prettier": "^3.8.0"
+    "prettier": "^3.8.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
