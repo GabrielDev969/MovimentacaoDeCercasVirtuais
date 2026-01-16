@@ -35,6 +35,10 @@ export function createKafkaClient(): Kafka {
     }
   }
 
+  const caPath = process.env.KAFKA_CA_CERTIFICATE_PATH;
+  const keyPath = process.env.KAFKA_KEY_CERTIFICATE_PATH;
+  const certPath = process.env.KAFKA_CERTIFICATE_PATH;
+
   const sslConfig: {
     rejectUnauthorized: boolean;
     ca: Buffer;
@@ -43,9 +47,9 @@ export function createKafkaClient(): Kafka {
     passphrase?: string;
   } = {
     rejectUnauthorized: false,
-    ca: loadFile(process.env.KAFKA_CA_CERTIFICATE_PATH!),
-    key: loadFile(process.env.KAFKA_KEY_CERTIFICATE_PATH!),
-    cert: loadFile(process.env.KAFKA_CERTIFICATE_PATH!),
+    ca: loadFile(caPath!),
+    key: loadFile(keyPath!),
+    cert: loadFile(certPath!),
   };
 
   if (process.env.KAFKA_KEY_PASSWORD) {
