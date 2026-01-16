@@ -13,33 +13,80 @@ Este sistema consome mensagens de localização de dispositivos através do Apac
 - **Registro de transições** (entrada/saída de áreas) em CSV
 - **Cálculo de permanência** em cada área
 - **Suporte a múltiplas áreas** configuradas via GeoJSON
+- **Logs estruturados** e informativos
+- **Shutdown graceful** com desconexão segura do Kafka
 
 ## Tecnologias
 
+- **TypeScript** - Linguagem de programação
 - **Node.js** - Runtime JavaScript
 - **KafkaJS** - Cliente Apache Kafka
 - **GeoJSON** - Formato de áreas geográficas
+- **ESLint** - Linter para TypeScript
+- **Prettier** - Formatador de código
+- **tsx** - Executor TypeScript para desenvolvimento
 
 ## Instalação
-```bash
+
+1. Clone o repositório:
+```bash 
+git clone https://github.com/GabrielDev969/MovimentacaoDeCercasVirtuais.git
+cd MovimentacaoDeCercasVirtuais
+```
+
+2. Instale as dependências:
+```bash 
 npm install
+```
+
+3. Compile o projeto TypeScript:
+```bash 
+npm run build
 ```
 
 ## Configuração
 
 1. Copie o arquivo `.env.example` para `.env`
+```env
+# Configuração do Kafka
+KAFKA_BROKERS=broker1:9093,broker2:9093
+KAFKA_TOPIC=nome-do-topico
+KAFKA_GROUP_ID=grupo-consumidor
+KAFKA_CLIENT_ID=device-tracker
+
+# Caminhos dos certificados SSL (obrigatórios)
+KAFKA_CA_CERTIFICATE_PATH=certificados/ca-cert.pem
+KAFKA_KEY_CERTIFICATE_PATH=certificados/client.key
+KAFKA_CERTIFICATE_PATH=certificados/client.crt
+
+# Senha da chave privada
+KAFKA_KEY_PASSWORD=sua-senha-aqui
+```
 2. Configure as variáveis de ambiente do Kafka
-3. Configure as áreas no arquivo `config/config_areas.geojson`
 
 ## Uso
 
 ```bash
 # Executar em modo produção
+npm run build
 npm start
 
 # Executar em modo desenvolvimento (com watch)
 npm run dev
 ```
+
+## Scripts Disponíveis
+
+| Script | Descrição |
+|--------|-----------|
+| `npm run build` | Compila o TypeScript para JavaScript |
+| `npm start` | Executa o sistema em produção |
+| `npm run dev` | Executa em modo desenvolvimento com watch |
+| `npm run lint` | Verifica erros de linting |
+| `npm run lint:fix` | Corrige automaticamente erros de linting |
+| `npm run format` | Formata o código com Prettier |
+| `npm run format:check` | Verifica se o código está formatado |
+| `npm run type-check` | Verifica tipos sem compilar |
 
 ## Demonstração
 
